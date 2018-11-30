@@ -1,0 +1,168 @@
+
+
+General:
+Environ (150):
+	goal: find secret environment variable
+	$ env
+	variable SECRET_FLAG has value picoCTF{eNv1r0nM3nT_v4r14Bl3_fL4g_3758492}
+Aca-Shell-A (150):
+	ls
+	cd secret
+	rm intel_*
+	echo 'Drop it in!'
+	cd ../executables
+	./DontLookHere
+	whoami
+	cd ..
+	cp /tmp/TopSecret passwords/
+	cd passwords
+	cat TopSecret
+	flag: picoCTF{CrUsHeD_It_4e355279}
+in out error (275):
+	must echo "Please may I have the flag?" to get output, but err and out are mixed
+	can't make files in this directory, but can use /tmp
+	put "Please may I have the flag?" in /tmp/please
+	./in-out-error < cat /tmp/please
+	but need to separate out and error
+	./in-out-error < cat /tmp/please >/tmp/outfile 2>/tmp/errfile
+	                 asks for flag    store out     store err
+	/tmp/outfile: rickroll
+	/tmp/errfile: flag repeated over and over
+	flag: picoCTF{p1p1ng_1S_4_7h1ng_437b5c88}
+store (400):
+	strings on executable
+	picoCTF{numb3r3_4r3nt_s4f3_cbb7151f}
+
+
+Web:
+Irish Name Repo (150):
+	SQL-inject password field 'or'1'='1
+	flag: picoCTF{con4n_r3411y_1snt_1r1sh_c0d93e2f}
+The Vault (250):
+	SQL-inject password with 'OR'1'='1
+	flag: picoCTF{w3lc0m3_t0_th3_vau1t_c4738171}
+	also: change debug in form to check if sql is doing ok
+Artisinal Handcrafted HTTP (300):
+	connect and solve capcha (so can't script)
+	first try: GET /flag.local HTTP/1.1
+				Host: 2018shell2.picoctf.com
+		received 301 moved permanently to same place?
+	(host is always 2018shell2.picoctf.com)
+	second: GET /login.html HTTP/1.1
+		no response
+	GET /login.php
+		301 moved permanently
+
+Crypto:
+hertz:
+	just dump in quipquip (substitution cipher solver)
+blaise's cipher (200):
+	jump in vigenere solver
+	key is 'flag'
+	flag is picoCTF{v1gn3r3_c1ph3rs_ar3n7_bad_095baccc}
+hertz2 (200):
+	dump in quipquip with clue vmjeJTQ=picoctf
+	flag: picoCTF{substitution_ciphers_are_too_easy_vpyydylnns}
+RSA madlibs (250):
+	q1a: can we get n from p and q?
+		yes
+	q1b: what is n if p=94603 and q=93187?
+		n = p*q = 8815769761
+	q2a: can we get q from p and n?
+		yes
+	q2b: what is q if p=81203 and n=6315400919?
+		77773
+	q3a: can we get p and q from e and n?
+		not easily, so no
+	q4a: can we get totient(n) from p and q?
+		yes
+	q4b: what is totient(n) if p=79999 and q=78203?
+		3128001798 <- carmichael totient
+		6256003596 <- euler totient
+		use euler totient???
+	q4a: can we get ciphertext given e, n, plaintext?
+		yes
+	q4b: give us ciphertext for this e, n, plaintext
+		26722917505435451150596710555980625220524134812001687080485341361511207096550823814926607028717403343344600191255790864873639087129323153797404989216681535785492257030896045464472300400447688001563694767148451912130180323038978568872458130612657140514751874493071944456290959151981399532582347021031424096175747508579453024891862161356081561032045394147561900547733602483979861042957169820579569242714893461713308057915755735700329990893197650028440038700231719057433874201113850357283873424698585951160069976869223244147124759020366717935504226979456299659682165757462057188430539271285705680101066120475874786208053
+	q5a: can we get plaintext from e, n, ciphertext
+		no
+	q6a: can we get d from p, q, e
+		1405046269503207469140791548403639533127416416214210694972085079171787580463776820425965898174272870486015739516125786182821637006600742140682552321645503743280670839819078749092730110549881891271317396450158021688253989767145578723458252769465545504142139663476747479225923933192421405464414574786272963741656223941750084051228611576708609346787101088759062724389874160693008783334605903142528824559223515203978707969795087506678894006628296743079886244349469131831225757926844843554897638786146036869572653204735650843186722732736888918789379054050122205253165705085538743651258400390580971043144644984654914856729
+	q7a: can we get plaintext from p, e, n, ciphertext?
+		yes
+	q7b: give ciphertext!
+
+Reversing:
+assembly-0 (150):
+	asm0:
+        push    ebp                     push base pointer
+        mov     ebp,esp                 move base pointer to top of stack
+        mov     eax,DWORD PTR [ebp+0x8] grab four bytes last put on stack and put in rax
+        mov     ebx,DWORD PTR [ebp+0xc] grab four bytes before those and put in rbx
+        mov     eax,ebx                 put rbx on rax
+        mov     esp,ebp                 move stack pointer back to old frame
+        pop     ebp                     put base pointer back
+        ret                             return
+	what is result of asm0(0x2a,0x4f)?
+	answer:0x4f
+
+
+Forensics
+Desroleaux:
+	q1: most common source ip
+		cat incidents.json | grep src_ip
+		answer: 250.226.237.236
+	load string into python json dict
+	q2: number of unique destinations from source <varies>
+		dests = {}
+		for item in j['tickets']:
+			s = item['src_ip']
+			if s not in dests:
+				dests[s] = set()
+			dests[s].add(item['dst_ip])
+		len(dests[<goal_source>]
+	q3: average number of destinations sent file with same hash (to 2 decimal places)
+		hashes = {}
+		for item in j['tickets']:
+			h = item['file_hash']
+			if h in hashes:
+				hashes[h].add(item['dst_ip'])
+			else:
+				hashes[h] = set()
+				hashes[h].add(item['dst_ip'])
+		x = [len(hashes[k]) for k in hashes.keys()]
+		sum(x)*1.0/len(x)
+		answer: 1.4285714285714286
+admin panel (150):
+	wireshark
+	.129 is client, .128 is server
+	jimmy is not admin, his password is p4ssw0rd
+	late in transmission admin password is picoCTF{n0ts3cur3_df598569}
+
+
+
+Binary Exploitation:
+buffer overflow 0 (150):
+	just give it lots of a's
+	flag: picoCTF{ov3rfl0ws_ar3nt_that_bad_b49d36d2}
+buffer overflow 1 (200):
+	buffer is 32 long
+	address of win() is 0x080485cb
+	reads overflow backwards
+	python: turn [8,4,133,203] into characters and put them in file with buffer of a's
+		store result in file in /tmp
+	cat file into program
+	number of a's to put: 44
+	flag: picoCTF{addr3ss3s_ar3_3asyd69e032d}
+buffer overflow 2:
+	fill up buffer of 100 plus 8 more bytes, then put return address for win
+	then put 0xdeadbeef (reversed), then 0xdeadc0de
+	deadbeef = [222, 173, 190, 239]
+	deadc0de = [222, 173, 192, 222]
+	get address of win function using gdb: info address win: 0x80485cb
+echooooo (300):
+	copy to attu and make fake flag file, then try more and more pointers.
+	%p %p %p %p %p %s %s %s
+	flag: picoCTF{foRm4t_stRinGs_aRe_DanGer0us_254148ae}
+
+
