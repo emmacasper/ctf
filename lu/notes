@@ -1,0 +1,66 @@
+
+
+relations:
+	see guesser5.py (finaly script)
+	try ADD and XOR for each bit of message.
+		if they are the same, the original bit was 0
+		if they are different, original bit was 1
+		eg: 01+01 = 10 != 00 = 01xor01; 00+01 = 01 = 00xor01
+	only 16 bytes are non-zero: size of key.
+	tell it to decode using key and get answer
+	flag{r3l4t3d_k3y_der1iviNg_fuNct1on5_h4ve_to_be_a_l1mit3d_cla55}
+
+sample interaction:
+
+------------------------------
+Welcome to theory world
+------------------------------
+
+------------------------------
+Possible Oracles
+(XOR) Choose XOR Oracle
+(ADD) Choose ADD Oracle
+(DEC) For trying to decrypt
+-----------------------------*
+XOR
+
+Please choose the operand in hex >>> 1
+Ciphertext is  OcdhErOR1wIOZtLBajvFcw4gbrnsjrgSpAJ/fnRWawoH9GH/wcuQ75e/zLoabycBuknOCxRW+3V7
+s/cpPFUVVA==
+
+------------------------------
+Possible Oracles
+(XOR) Choose XOR Oracle
+(ADD) Choose ADD Oracle
+(DEC) For trying to decrypt
+-----------------------------*
+ADD
+
+Please choose the operand in hex >>> 1
+Ciphertext is  OcdhErOR1wIOZtLBajvFcw4gbrnsjrgSpAJ/fnRWawoH9GH/wcuQ75e/zLoabycBuknOCxRW+3V7
+s/cpPFUVVA==
+
+------------------------------
+Possible Oracles
+(XOR) Choose XOR Oracle
+(ADD) Choose ADD Oracle
+(DEC) For trying to decrypt
+-----------------------------*
+DEC
+
+Enter the key base64 encoded >>> aaaaaaaaaaaaaaaaaaaaaaaa
+Traceback (most recent call last):
+  File "/home/chall/rka.py", line 113, in <module>
+    main()
+  File "/home/chall/rka.py", line 107, in main
+    aes = pyaes.AESModeOfOperationECB(key)
+  File "/home/chall/pyaes/aes.py", line 304, in __init__
+    self._aes = AES(key)
+  File "/home/chall/pyaes/aes.py", line 134, in __init__
+    raise ValueError('Invalid key size')
+ValueError: Invalid key size
+
+
+
+
+
