@@ -1,0 +1,39 @@
+
+---crypto
+pudding:
+	atom models (plum pudding is old model)
+	molecular geometry -> letters?
+lost in transmission:
+	base64 decode:
+		10110101011101010010101011110101011010100101101010011110101011100101010111001010101001101010000000101010011110101000000101010000001010101001101010000000101010011110101000000101010000001010101001101010000000101010011110101011100101010111001010101001101010
+	ascii decode: gibberish
+	hex decode:
+		2D5D4ABD5A96A7AB9572A9A80A9EA0540AA6A02A7A81502A9A80A9EAE55CAA6A
+	baudot murray with padding two 0's on front:
+		sychykrglgwgqsjlyihrkryrhgt	hvherydysdxjlybrwr
+	useful: https://v2.cryptii.com/ita2/text
+eggplant:
+	emoji.txt for frequency analysis
+	monty python quote
+
+
+
+---web
+lazy dev:
+	see sitemap
+
+
+---misc
+rip:
+	picture: Stan Lee (dinosaur) + meteor -> R.I.P Stan Lee
+	brainfuck
+	https://www.youtube.com/watch?v=F6LYOfeSWNM
+	we are family singalong video
+	comments:
+		let me staple the vicar --> peter kay
+		RIP joni sledge
+		R.I.P I love your song
+		[from OkSharkey, around noon today]: RIP Stan Lee
+	Joni Sledge is the singer, and died march 2017
+	Stan Lee died a few days ago
+
