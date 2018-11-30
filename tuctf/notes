@@ -1,0 +1,61 @@
+
+web:
+clue-themed
+mrs white:
+	phone number does not go through -- 275 area code is not assigned
+	comment says she's looking for Mr. /Boddy
+	so go to /Boddy and get flag
+	TUCTF{1_4ccu53_Mr5._Wh173_w17h_7h3_c4ndl3571ck_1n_7h3_c0mm3n75}
+miss scarlet:
+	/Boddy: comment "Maybe look into how easy it would be to receive some tissues in the 'post'"
+prof plum:
+	/ leads you to /research if you want to apply
+	/researcher.php says you have to find mr boddy, and tells you to look at /looking.php
+	/looking.php says "maybe try somewhere else in the mansion?"
+	you can submit a place to look, but none of them work!
+	post runs /signup.php, but trying to look at that just redirects to /looking.php
+	prof plum is researching sirens.
+		siren is a web api
+
+crypto:
+neverending:
+	morse code scripting
+	level0: plain morse code
+	level1: morse code then rot13
+	level2: morse code but with dots and dashes flipped
+	level3: morse code, and a substitution cipher
+RSAyyyy:
+	didn't solve
+Jimmy:
+	know two ciphertexts with same xor key
+	so xor ciphertexts and get secret xor flag
+	do analysis somehow, like with that guesser script
+
+aessential:
+	see aes_stealer.py
+	flag: TUCTF{A3S_3CB_1S_VULN3R4BL3!!!!}
+	general idea:
+	guess 31 '^' and see then guess each letter appended to that,
+	compare answers for first block to see which one it is
+	now we know first character X
+	so guess 30 '^'
+	and 30 '^' then X then each letter to find second letter
+	etc.
+
+
+
+Misc:
+Literal:
+	redirects to fork-bomb
+	view-source on /Literal.html
+	comment has picture of bomb, made of letters
+	choose letters that aren't 'o'
+	TUCTF{R34L.0N35.4R3.D4NG3R0U5}
+ancient:
+	there is a lizard in the picture, and a clue about Gurney
+	James Gurney is the creator of Dinotopia, which uses a footprint alphabet
+	the flag is if_only_jurassic_park_was_like_this
+
+
+
+
