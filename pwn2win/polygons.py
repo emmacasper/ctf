@@ -112,6 +112,8 @@ def dist(x, y):
 
 def on_wall((x, y), r):
     #true if point x,y is on the all of radius r
+    if math.isnan(x) or math.isnan(y) or math.isnan(r):
+        #print("oh no it's nan we dont' know if it's on the walllll")
     ans = math.pow(x,2) + math.pow(y,2) == math.pow(r,2)
     if ans:
         #print(x, y, "is on hte wall", r)
@@ -145,7 +147,7 @@ def drop_poly(guards, r, n, x0, y0, x1, y1):
                 guard.see = True
             continue
         # else there are two of them
-        if on_wall(possible[0], (guard.x, guard.y)) or on_wall(possible[1], (guard.x, guard.y)):
+        if on_wall(possible[0], guard.d) or on_wall(possible[1], guard.d):
             # guard got squashed by edge of polygon...
             guards.remove(guard)
         # neither is on wall:
@@ -184,7 +186,7 @@ def take_shots(polys, guards, r):
     maxdist = 0
     for guard in guard_objs:
         if guard.see:
-            chance *= guard[2]
+            chance *= guard.prob
     return chance
 
 gs = [(0,11,0.1)] #[(11,0,0.1), (0,11,0.1)]
