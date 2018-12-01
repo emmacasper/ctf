@@ -113,6 +113,7 @@ def dist(x, y):
 def on_wall((x, y), r):
     #true if point x,y is on the all of radius r
     if math.isnan(x) or math.isnan(y) or math.isnan(r):
+        pass
         #print("oh no it's nan we dont' know if it's on the walllll")
     ans = math.pow(x,2) + math.pow(y,2) == math.pow(r,2)
     if ans:
@@ -142,19 +143,24 @@ def drop_poly(guards, r, n, x0, y0, x1, y1):
             if on_wall(possible[0], guard.d):
                 # guard gets squashed :(
                 guards.remove(guard)
+                #print("guard got squahsed by corner")
             if on_wall(possible[0], r):
                 # wall got squashed !
                 guard.see = True
             continue
         # else there are two of them
+        #print("number of possibilities:", len(possible), "; possibilities:", possible)
         if on_wall(possible[0], guard.d) or on_wall(possible[1], guard.d):
             # guard got squashed by edge of polygon...
             guards.remove(guard)
+            #print("guard got squashed by edge")
         # neither is on wall:
         d0 = math.pow(possible[0][0],2) + math.pow(possible[0][1], 2)
         d1 = math.pow(possible[1][0],2) + math.pow(possible[1][1], 2)
-        if (d0 > guard.d and d1 < guard.d) or (d0 < guard.d and d1 > guard.d):
+        #print("distances:", d0, d1, guard.d)
+        if (d0 > guard.d*guard.d and d1 < guard.d*guard.d) or (d0 < guard.d*guard.d and d1 > guard.d*guard.d):
             # guard got squashed
+            #print("guard got squashed by polygon")
             guards.remove(guard)
         # guard is not squashed.
         # is wall squashed by tangent?
@@ -173,6 +179,7 @@ class Guard():
         self.prob = prob
         self.see = False
         self.d = math.sqrt(math.pow(self.x, 2) + math.pow(self.y, 2))
+        #print("I'm a guard!", x, y, prob, self.d)
 
 def take_shots(polys, guards, r):
     guard_objs = [Guard(g[0], g[1], g[2]) for g in guards]
@@ -189,8 +196,9 @@ def take_shots(polys, guards, r):
             chance *= guard.prob
     return chance
 
-gs = [(0,11,0.1)] #[(11,0,0.1), (0,11,0.1)]
-ps = [(10,0,11,0,3), (0,10,0,10.5,3)]
-print(take_shots(ps, gs, 10))
+#gs = [(11,0,0.1), (0,11,0.1)]
+#ps = [(10,0,11,0,3), (0,10,0,10.5,3)]
+#print(take_shots(ps, gs, 10))
 
-
+#print(take_shots([(0.1,2,0.1,3,4)], [(0,8,0.354)], 2))
+print(take_shots([(0, 2, 0, 3, 4), (0, -5, 0, -4.5, 7)], [(0, 3.2, 0.236)], 2))
