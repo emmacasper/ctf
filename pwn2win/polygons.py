@@ -127,7 +127,28 @@ def on_wall((x, y), r):
 def drop_poly(guards, r, n, x0, y0, x1, y1):
     # drops a polygon with n edges at location x0, y0 and vertex at x1, y1
     # moves guards from blocked to clear if the polygon clears their path through the wall at radius r
+    # reutrns True if prisoner got squashed, else None
     edges = get_segments(x0, y0, x1, y1, n)
+    # check if prisoner got squashed
+    # pick random eqation for prisoner line. y = x goes through 0,0.
+    possible = []
+    for edge in edges:
+        intersect(edge[0], edge[1], 1, 0, possible)
+    if len(possible) == 1:
+        if possible[0] == (0,0):
+            print("polygon corner squashed prisoner:", x0, y0, x1, y1, n)
+            return True
+    if len(possible) > 1:
+        if possible[0] == (0,0) or possible[1] == (0,0):
+            print("polygon edge squashed prisoner:", x0, y0, x1, y1, n)
+            return True
+        if possible[0][0] > 0 and possible[1][0] < 0:
+            print("polygon squashed prisoner:", x0, y0, x1, y1, n)
+            return True
+        if possible[0][0] < 0 and possible[1][0] > 0:
+            print("polygon squashed prisoner:", x0, y0, x1, y1, n)
+            return True
+    # prisoner was not squashed. yay!
     for g in range(len(guards)-1, -1, -1):
         guard = guards[g]
         gm, gb = guard_equation(guard.x, guard.y), 0
@@ -185,7 +206,9 @@ def take_shots(polys, guards, r):
     guard_objs = [Guard(g[0], g[1], g[2]) for g in guards]
     for poly in polys:
         #print("dropping poly", poly)
-        drop_poly(guard_objs, r, poly[4], poly[0], poly[1], poly[2], poly[3])
+        if drop_poly(guard_objs, r, poly[4], poly[0], poly[1], poly[2], poly[3]):
+            # drop_poly returns True if polygon squashed prisoner.
+            return 0
         # all the guards got squashed...
         if len(guard_objs) == 0:
             return 1
@@ -201,4 +224,4 @@ def take_shots(polys, guards, r):
 #print(take_shots(ps, gs, 10))
 
 #print(take_shots([(0.1,2,0.1,3,4)], [(0,8,0.354)], 2))
-print(take_shots([(0, 2, 0, 3, 4), (0, -5, 0, -4.5, 7)], [(0, 3.2, 0.236)], 2))
+#print(take_shots([(0, 2, 0, 3, 4), (0, -5, 0, -4.5, 7)], [(0, 3.2, 0.236)], 2))
