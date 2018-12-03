@@ -1,0 +1,61 @@
+
+rules page has flag for submission to 'bonus':
+	CTF-BR{RTFM_1s_4_g00d_3xpr3ss10n_v4.0}
+
+PPC:
+Russian polygons
+this is what Richard figured out:
+         https://math.stackexchange.com/questions/35438/maths-find-vertices-when-1-vertex-and-center-point-is-given-in-polygon
+         "
+Assume that center of the polygon has coordinates (x_0,y_0) and known vertice has coordinates (x_n,y_n). Also assume that we are considering n-sided polygon.
+Coordinates of i-th vertce (0<i<n) can be calculated using this formulae
+x_i = x_0+R*cos(a+2*Pi*i/n)
+y_i = y_0+R*sin(a+2*Pi*i/n)
+where
+     _______________________
+R = v(x_n-x_0)^2+(y_n-y_0)^2
+a = acos((x_n-x_0)/R)"
+       # Todo:
+##### not necessary 1. Get location on the circumference of the circle between the center 
+# ####   and each guard (equations for this derived)
+# 1. Get the equation of the line from the prisoner to the guard
+# 2. Get location of every vertex of the regular polygon
+# 3. Get equation for the line segment for every edge of the polygon
+# 4. For each line segment, determine if the line from the center 
+#    through the guard intersects it. Sum the number of such times:
+#    A. If it's zero, then the guard can't shoot the prisoner.
+#    B. If it's one, then the guard can shoot if the distance from 
+#       that point of intersection to the center is exactly equal to the 
+#       radius.
+#    C. If it's two, then calculate the distance from each point of
+#       intersection to the center. If one such distance is greater than 
+#       the radius and the other is less, then the guard can shoot the 
+#       prisoner. 
+It is implemented in polygons.py
+There are some additions: turns out guards can be squashed by polygons,
+and so can the prisoner.
+Current implementation reflects that.
+But apparently the problem is that we can't get the polygons' vertices if the polygons are in the third quadrant
+(I think that's the one where x and y are negative)
+so ultimately the challenge was unsolved.
+
+Web:
+BavBin:
+	No xss in the pastes, far as I can tell (it's not in an interesting tag, and <> are escaped)
+		There is a mode in the database which says that the ones I've made are text
+		which implies I could make one that is something else, like html. But how????
+	Search box does not seem sql-injectable
+	"report" only accepts things that start with that IP.
+		so use <ip>.mastodon.uwctf.ninja
+		See index.html:
+			javascript can't write files.
+			but it can make requests that contain the cookie.
+			provided the javascript can access the cookie
+		same origin policy: we can get domains off of .bavarian.world (which we did for a different problem)
+			tried <ip>.bavarian.world
+			it does visit the link, but we cannot get the cookie
+			maybe the domain for cookies is just the IP
+			--> so the answer would be to somehow do an actual malicious paste...
+
+
+
