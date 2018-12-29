@@ -1,0 +1,40 @@
+
+crypto:
+unofficial:
+	supposedly it's an AES orcale, which should be solvable.
+	does something with CFB mode which is like CBC but is a stream cipher so doesn't need padding (but how??)
+	we can't interact with the oracle, we can just look at the pcap.
+
+
+web:
+typely:
+	blockchain....
+	time limit: around 10 minutes
+	deposit into accounts: yes
+	transfer negative money: no (syntax error)
+	transfer money you don't have: no (runtime error)
+	transfer money you do have: yes
+	transfer money you don't have to self: no (runtime error)
+	deposit negative money: no (syntax error)
+	deposit max_int+1: no (type error)
+	more type erros:
+		depositing max int
+	deposit 214748364: yes ok
+	deposit 2147483640: too big
+	max balance is 1000..000 (not important)
+	goal:
+		you want to request the flag.
+	source (on /static/bank.js):
+		does something with async, await, and Promise.
+		javascript is a total mess, you can make a variable which is (declare function {...})()
+	flag will arrive soon if you can get checkFlagRequested() to return true.
+		it gets all the blocks, and checks for a block with a topic of FlagRequested.
+		FlagRequested is a variable (randomly chosen per bank probably)
+
+	idea:
+		intercept response to eth_getLogs and add item in results which has "topics": [FlagRequested]
+	requests to eth_getLogs always have start block of 0x0, but ones for balance have other starts.
+	idea:
+		intercept setup getting config and replace {"complexity": 0.02} with a smaller complexity
+		result: bank is apparently invalid?
+
