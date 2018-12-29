@@ -1,0 +1,56 @@
+
+web:
+flags:
+	gets HTTP_ACCEPT_LANGUAGE (or 'ot' for other if it can't find one)
+	picks first one
+	goes to /flags/<lang> and reads that out as a b64 string, whcih is displayed as image below.
+	image is american flag; so find one for en-us.
+	found:
+		en: british
+		de: german
+	turns out *you* control the HTTP_ACCEPT_LANGUAGE, it is one of your headers.
+	tell it you accept flag
+	oops, flags/flag is not the file, you want /flag
+	try /flag
+	oops, it deletes ../
+	it's probably not very smart, let's try doing ....//flag and see if it turns that into ../flag
+	it does! (and gives us an error message)
+	so now the problem is you need to be more direcotries up, not in /var/www/html/index.php
+	do more ../!
+	now you get an image that won't display. view-source it an stick the image in a b64 decoder.
+	flag: 35c3_this_flag_is_the_be5t_fl4g
+
+re:
+1996:
+	makes buffer of size 1024
+	reads input into buffer
+	later returns from main, and will take overflowed as return address
+	exploit: python -c "print('a'*1044 + 'g'*4 + '\x97\x08\x40\x00\x00\x00\x00')"
+	but aaaaa it is hard, we need gdb
+		break at 0x400967, right before main returns
+		check where it will return to, using x/gx $rsp (examine one word in hex at the stack pointer)
+		it should have the address written there
+	we cannot rely just on gdb, because programs might run differently there. In fact, they do run differently!
+		so we have to use pwnlib, and sleep it so we can attach a gdb *after* it's running
+		then look at what it is doing.
+		(we can check it without pwnlib, just then we can only input printable characters through copy-paste)
+	exploit.py: it should work!!!!
+		but for some reason it appends a 0xc2 between all the 'a's and the address
+		it does work if we run it with python2, looks like the problem is python3?
+	flag gotten! it is kinda random looking, "like a proper flag, not this flag is fake"
+poet:
+	input one-line poem, and author; receive score
+	goal is to score exactly 1000000 points
+	strings reveals that some words (flag, eat, sleep, pwn...) get you points
+	poem of 'flag' is 100 points, 'flag flag' is 200 points, 'eat flag' is 200 points
+	set author to aaaaa..aaaaa (four lines on terminal): get 1633771873 points. too many
+	set author to three lines of a's: still that many
+	set author to two lines of a's: still that many
+	65 a's makes score 97; 64 a's and then a b makes score 98
+		after writing 64 characters, you overwrite the score.
+	So write 64 a's, then the characters to make that int 1000000
+	1000000 is 0xf4240
+	exploit string: 'a'*64 + '\x40\x42\x0f' (exploit in poet_exploit.py)
+	flag!  35C3_f08b903f48608a14cbfbf73c08d7bdd731a87d39
+
+
