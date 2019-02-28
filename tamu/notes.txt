@@ -1,0 +1,82 @@
+
+web:
+Not another SQLi challenge:
+	login admin
+	password 'or'1'='1
+	flag: gigem{f4rm3r5_f4rm3r5_w3'r3_4ll_r16h7}
+
+
+crypto:
+-.-:
+	syllables di dit dah: international morse code
+	replaced di, dit with . and dah with .- (didah_out.txt)
+	translation:
+	0X57702A6C58744751386538716E6D4D59552A737646486B6A49742A5251264A705A766A6D2125254B446B6670235E4E39666B346455346C423372546F5430505A516D4351454B5942345A4D762A21466B386C25626A716C504D6649476D612525467A4720676967656D7B433169634B5F636C31434B2D7930755F683476335F6D3449317D20757634767A4B5A7434796F6D694453684C6D385145466E5574774A404E754F59665826387540476E213125547176305663527A56216A217675757038426A644E49714535772324255634555A4F595A327A37543235743726784C40574F373431305149
+	to ascii:
+	Wp*lXtGQ8e8qnmMYU*svFHkjIt*RQ&JpZvjm!%%KDkfp#^N9fk4dU4lB3rToT0PZQmCQEKYB4ZMv*!Fk8l%bjqlPMfIGma%%FzG gigem{C1icK_cl1CK-y0u_h4v3_m4I1} uv4vzKZt4yomiDShLm8QEFnUtwJ@NuOYfX&8u@Gn!1%Tqv0VcRzV!j!vuup8BjdNIqE5w#$%V4UZOYZ2z7T25t7&xL@WO7410QI
+	flag: gigem{C1icK_cl1CK-y0u_h4v3_m4I1}
+RSAaaay:
+	factor first number: 2531257 = 509 * 4973
+    totient is lcm(508, 4972) = 631444
+	get private exponent x * 43 ~ 1 mod 631444; x = 58739
+	decrypt c^58739 mod 2531257
+	uhhh result is too small if we decrypt whole thing.
+	decrypt the chunks of 6 digits each? this gets gibberish
+		103L, 105103L, 101109L, 12383L, 97118L, 97103L, 10195L, 83105L, 12095L, 70108L, 121105L, 110103L, 9584L, 105103L, 101114L, 115125L
+		103 = g, 105 = a, etc	
+	extract lines:
+>>> y
+['103', '105103', '101109', '12383', '97118', '97103', '10195', '83105', '12095', '70108', '121105', '110103', '9584', '105103', '101114', '115125']
+>>> for m in y:
+...     if len(m) == 3:
+...             r.append(m)
+...     elif len(m) == 4:
+...             r.append(m[:2])
+...             r.append(m[2:])
+...     elif len(m) == 6:
+...             r.append(m[:3])
+...             r.append(m[3:])
+...     elif len(m) == 5:
+...             if m[0] == '1':
+...                     r.append(m[:3])
+...                     r.append(m[3:])
+...             else:
+...                     r.append(m[:2])
+...                     r.append(m[2:])
+...     else:
+...             print('aaa')
+...             r.append('x')
+>>> r
+['103', '105', '103', '101', '109', '123', '83', '97', '118', '97', '103', '101', '95', '83', '105', '120', '95', '70', '108', '121', '105', '110', '103', '95', '84', '105', '103', '101', '114', '115', '125']
+>>> i = [chr(int(f)) for f in r]
+>>> i
+['g', 'i', 'g', 'e', 'm', '{', 'S', 'a', 'v', 'a', 'g', 'e', '_', 'S', 'i', 'x', '_', 'F', 'l', 'y', 'i', 'n', 'g', '_', 'T', 'i', 'g', 'e', 'r', 's', '}']
+>>> ''.join(i)
+'gigem{Savage_Six_Flying_Tigers}'
+	flag: gigem{Savage_Six_Flying_Tigers}
+
+
+
+misc:
+Who do I trust?
+	view cert to see issuer
+	Let's Encrypt Authority X3
+
+
+reversing:
+cheesy:
+	run strings:
+		RkxBR2ZsYWdGTEFHZmxhZ0ZMQUdmbGFn
+		Q2FuIHlvdSByZWNvZ25pemUgYmFzZTY0Pz8=
+		RkxBR2ZsYWdGTEFHZmxhZ0ZMQUdmbGFn
+		WW91IGp1c3QgbWlzc2VkIHRoZSBmbGFn
+	base 64:
+		first two lines:
+		FLAGflagFLAGflagFLAGflag
+		Can you recognize base64??
+		last two lines:
+		FLAGflagFLAGflagFLAGflag
+		You just missed the flag
+	** but the last two lines decrypt into gibberish when the first two lines are there.
+		uhh what
+
