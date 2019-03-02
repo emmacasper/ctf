@@ -4,7 +4,30 @@ Not another SQLi challenge:
 	login admin
 	password 'or'1'='1
 	flag: gigem{f4rm3r5_f4rm3r5_w3'r3_4ll_r16h7}
+gig'ems:
+	alt text differs.
+	extracted in gigem_gig_small and gigem_cookie_small
+science!:
+	enter two chemicals; it lists them and gives you gif
+	<marquee>able
+	but scripts don't run; it just doesn't do javascript?
+	form submission posts to /science
+	you can't get /science
+	nevermind you can run javascript
+	document.flag is underined; document.cookie is empty
+buckets:
+	view-source: comment at top: http://ctfdevbucket.s3-website.us-east-2.amazonaws.com/
+		that bucket doesn't exist apparently
+	comment: password is near Dogs
+	picture: doggos3.jpg
+	comment: <!--If you look around hard enough you might find some dogs, some cats, some animals and some mysteries-->
 
+secure coding:
+SQL: fix the not another SQLi
+	escape the username and password:
+		$user = mysqli_real_escape_string($conn, $_POST['username']);
+		$pass = mysqli_real_escape_string($conn, $_POST['password']);
+	flag: gigem{the_best_damn_sql_anywhere}
 
 crypto:
 -.-:
@@ -54,7 +77,31 @@ RSAaaay:
 >>> ''.join(i)
 'gigem{Savage_Six_Flying_Tigers}'
 	flag: gigem{Savage_Six_Flying_Tigers}
-
+:)
+	is base64
+	translate base64
+>>> import base64
+>>> z = base64.b64decode(y)
+>>> f = z.decode('ASCII')
+	run repeating xor breaker
+	key found: length 4.
+	Attempted decryption: "ghgemzI'm!not!supdrsthtiots, cut H am!a lhttld sthtiots.}"
+    looks like it's beginning gigem{
+>>> g1i = [ord(x) for x in 'gigem{']
+>>> g1i
+[103, 105, 103, 101, 109, 123]
+>>> [a ^ b for a, b in zip(f, g1i)]
+[58, 41, 58, 41, 58, 41]
+	key is 58, 41
+>>> k = [58 for i in range(57)]
+>>> for i in range(1, 57, 2):
+	k[i] = 41
+>>> fnum = [ord(x) for x in f]
+>>> rrr = [a^b for a, b in zip(fnum, k)]
+>>> yy = [chr(x) for x in rrr]
+>>> ''.join(yy)
+"gigem{I'm not superstitious, but I am a little stitious."
+	Add ending } to flag.
 
 
 misc:
