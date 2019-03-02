@@ -126,4 +126,11 @@ cheesy:
 		You just missed the flag
 	** but the last two lines decrypt into gibberish when the first two lines are there.
 		uhh what
+042:
+	assembly file: reversing3.s (commented)
+	L_.str.2: format string to print the flag.
+	looking at main, we load a bunch of numbers into the stack.
+	hmmmmmm are they letters
+	yes they are
+	flag: gigem{A553Mb1Y}
 
