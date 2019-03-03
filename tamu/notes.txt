@@ -28,6 +28,10 @@ SQL: fix the not another SQLi
 		$user = mysqli_real_escape_string($conn, $_POST['username']);
 		$pass = mysqli_real_escape_string($conn, $_POST['password']);
 	flag: gigem{the_best_damn_sql_anywhere}
+pwn:
+	check size of buffer
+	use fgets instead, allow sizeof(buf)-1 bytes to be read (last byte is for null terminator)
+	flag: gigem{check_that_buffer_size_baby}
 
 crypto:
 -.-:
@@ -102,6 +106,22 @@ RSAaaay:
 >>> ''.join(yy)
 "gigem{I'm not superstitious, but I am a little stitious."
 	Add ending } to flag.
+knapsack:
+	message (assuming 4-nibble chunks because then we can have gigem{):
+		11b9 0d63 11b9 0ff9 0ce6 10c4 123b 10c4 0ce6 0dfa 1236 1061 0ce6 0d45 0d00 0ce6 1061 1061 10c4 0985 1534 0d45 1236 1534 0985 0927 0e5d 0985 0e58 1236 10c9
+	known plaintext gigem{......}
+	01100111->4537, 01101001->3427
+	works if we take the public key bits backwards (4537=895+1443+865+1235+99 and 'g'=0x67=0b01100111)
+	you know what let's just brute force this we know it's ascii
+>>> import knapsack
+>>> r = [(chr(i), knapsack.encrypt(chr(i))) for i in range(32, 127)]
+>>> m = {b: a for a, b in r}
+>>> n = sorted(m)
+>>> q = [(x, m[x]) for x in n]
+>>> q
+[(895, '@'), (900, 'P'), (994, 'A'), (999, 'Q'), (1443, ' '), (1448, '0'), (1542, '!'), (1547, '1'), (1760, 'D'), (1765, 'T'), (1859, 'E'), (1864, 'U'), (1885, 'H'), (1890, 'X'), (1984, 'I'), (1989, 'Y'), (2130, 'B'), (2135, 'R'), (2229, 'C'), (2234, 'S'), (2308, '$'), (2313, '4'), (2338, '`'), (2343, 'p'), (2407, '%'), (2412, '5'), (2433, '('), (2437, 'a'), (2438, '8'), (2442, 'q'), (2532, ')'), (2537, '9'), (2678, '"'), (2683, '2'), (2750, 'L'), (2755, '\\'), (2777, '#'), (2782, '3'), (2849, 'M'), (2854, ']'), (2995, 'F'), (3000, 'V'), (3094, 'G'), (3099, 'W'), (3120, 'J'), (3125, 'Z'), (3203, 'd'), (3208, 't'), (3219, 'K'), (3224, '['), (3298, ','), (3302, 'e'), (3303, '<'), (3307, 'u'), (3328, 'h'), (3333, 'x'), (3397, '-'), (3402, '='), (3427, 'i'), (3432, 'y'), (3543, '&'), (3548, '6'), (3573, 'b'), (3578, 'r'), (3642, "'"), (3647, '7'), (3668, '*'), (3672, 'c'), (3673, ':'), (3677, 's'), (3767, '+'), (3772, ';'), (3985, 'N'), (3990, '^'), (4084, 'O'), (4089, '_'), (4193, 'l'), (4198, '|'), (4292, 'm'), (4297, '}'), (4438, 'f'), (4443, 'v'), (4533, '.'), (4537, 'g'), (4538, '>'), (4542, 'w'), (4563, 'j'), (4568, 'z'), (4632, '/'), (4637, '?'), (4662, 'k'), (4667, '{'), (5428, 'n'), (5433, '~'), (5527, 'o')]
+	hex numbers: 4537,3247,4537,4089,3302,4292,4667,4292,3302,3578,4662,4193,3302,3397,3328,3302,4193,4193,4292,2437,5428,3397,4662,5428,2437,2343,3677,2437,3672,4662,4297
+	flag: gig_em{merkle-hellman-knapsack}
 
 
 misc:
@@ -133,4 +153,6 @@ cheesy:
 	hmmmmmm are they letters
 	yes they are
 	flag: gigem{A553Mb1Y}
-
+keygenme:
+	see keygen.s (annotated assembly)
+	but it compares to a string after the end of the file, how do I know what to compare to?
